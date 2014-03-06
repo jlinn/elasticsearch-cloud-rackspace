@@ -1,0 +1,12 @@
+# copy this to elasticsearch.yml and replace placeholder values with actual Rackspace credentials
+
+rackspace:
+    account: your_account
+    key: your_key
+    enabled: true
+
+repositories:
+    cloudfiles:
+        container: "es_snapshot_test"
+
+discovery.type: cloudServers

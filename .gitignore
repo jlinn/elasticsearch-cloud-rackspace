@@ -1,0 +1,16 @@
+/data
+/work
+/logs
+/.idea
+/target
+.DS_Store
+.local-execution-hints.log
+*.iml
+/.settings
+/.project
+/.classpath
+
+release.properties
+pom.xml.releaseBackup
+
+/src/test/resources/elasticsearch.yml
