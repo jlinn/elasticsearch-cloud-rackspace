@@ -2,7 +2,7 @@ Rackspace Cloud plugin for [Elasticsearch](http://www.elasticsearch.org/)
 =========================================================================
 
 This plugin enables the use of Rackspace Cloud Files for [snapshot / restore](http://www.elasticsearch.org/guide/en/elasticsearch/reference/master/modules-snapshots.html)
-repositories makes use of the Rackspace Cloud Servers API to perform automatic unicast host discovery.
+repositories and uses the Rackspace Cloud Servers API to perform automatic unicast host discovery.
 
 ## Installation
 
