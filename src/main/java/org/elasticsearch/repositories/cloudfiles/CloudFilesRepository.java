@@ -45,7 +45,7 @@ public class CloudFilesRepository extends BlobStoreRepository{
             throw new RepositoryException(repositoryName, "No container defined for cloud files gateway.");
         }
 
-        String dataCenter = repositorySettings.settings().get("dataCenter", componentSettings.get("dataCenter"));
+        String dataCenter = repositorySettings.settings().get("region", componentSettings.get("region"));
         if(dataCenter == null){
             dataCenter = "ORD";
         }
