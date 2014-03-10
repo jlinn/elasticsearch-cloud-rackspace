@@ -8,11 +8,11 @@ repositories makes use of the Rackspace Cloud Servers API to perform automatic u
 
 To install the plugin, run the following command:
 ```
-bin/plugin --url https://github.com/jlinn/elasticsearch-cloud-rackspace/releases/download/v0.1.1/elasticsearch-cloud-rackspace-0.1.1.zip --install cloud-rackspace
+bin/plugin --url https://github.com/jlinn/elasticsearch-cloud-rackspace/releases/download/v0.1.2/elasticsearch-cloud-rackspace-0.1.2.zip --install cloud-rackspace
 ```
 
 | Rackspace Cloud Plugin | Elasticsearch |
-| 0.1.1 | 1.0.1 |
+| 0.1.2 | 1.0.1 |
 
 ## Configuration
 

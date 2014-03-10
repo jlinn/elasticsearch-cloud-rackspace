@@ -92,10 +92,7 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
                 marker = list.getNextMarker();
             }
             ListContainerOptions options;
-            if(blobNamePrefix != null){
-                options = ListContainerOptions.Builder.inDirectory(buildKey(blobNamePrefix));
-            }
-            else if(!keyPath.equals("/")){
+            if(!keyPath.equals("/")){
                 options = ListContainerOptions.Builder.inDirectory(keyPath);
             }
             else{
@@ -115,7 +112,9 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
                 if(item.getUserMetadata().containsKey("length")){
                     length = Long.valueOf(item.getUserMetadata().get("length"));
                 }
-                blobsBuilder.put(name, new PlainBlobMetaData(name, length));
+                if((blobNamePrefix != null && name.startsWith(blobNamePrefix) || blobNamePrefix == null)){
+                    blobsBuilder.put(name, new PlainBlobMetaData(name, length));
+                }
             }
 
             if(list.getNextMarker() == null){

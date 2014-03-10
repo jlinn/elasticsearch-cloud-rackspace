@@ -1,6 +1,8 @@
 package org.elasticsearch.test.repositories.cloudfiles;
 
 import org.elasticsearch.cloud.rackspace.CloudFilesService;
+import org.elasticsearch.common.collect.ImmutableList;
+import org.elasticsearch.snapshots.SnapshotInfo;
 import org.elasticsearch.test.cloud.rackspace.AbstractRackspaceTest;
 import org.elasticsearch.action.admin.cluster.repositories.put.PutRepositoryResponse;
 import org.elasticsearch.action.admin.cluster.snapshots.create.CreateSnapshotResponse;
@@ -21,6 +23,7 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 
 /**
  * User: Joe Linn
@@ -91,6 +94,9 @@ public class CloudFilesSnapshotRestoreTest extends AbstractRackspaceTest{
         assertThat(createSnapshotResponse.getSnapshotInfo().successfulShards(), Matchers.equalTo(createSnapshotResponse.getSnapshotInfo().totalShards()));
 
         assertThat(client.admin().cluster().prepareGetSnapshots("test-repo").setSnapshots("test-snap").get().getSnapshots().get(0).state(), Matchers.equalTo(SnapshotState.SUCCESS));
+
+        ImmutableList<SnapshotInfo> snapshots = client.admin().cluster().prepareGetSnapshots("test-repo").get().getSnapshots();
+        assertThat(snapshots, hasSize(1));
 
         logger.info("--> delete some data");
         for (int i = 0; i < 50; i++) {
