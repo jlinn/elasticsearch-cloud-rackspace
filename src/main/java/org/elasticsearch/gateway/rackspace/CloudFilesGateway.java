@@ -30,7 +30,7 @@ public class CloudFilesGateway extends BlobStoreGateway{
 
     @Inject
     protected CloudFilesGateway(Settings settings, ThreadPool threadPool, ClusterService clusterService, ClusterName clusterName, CloudFilesService cloudFilesService) throws IOException {
-        super(settings, threadPool, clusterService);
+        super(settings, threadPool, clusterService, clusterName);
 
         /*String username = componentSettings.get("username");
         if(username == null){

@@ -5,7 +5,6 @@ import org.elasticsearch.cloud.rackspace.blobstore.CloudFilesBlobStore;
 import org.elasticsearch.common.blobstore.BlobPath;
 import org.elasticsearch.common.blobstore.ImmutableBlobContainer;
 import org.elasticsearch.common.util.concurrent.MoreExecutors;
-import org.elasticsearch.test.cloud.rackspace.blobstore.AbstractBlobStoreTest;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
