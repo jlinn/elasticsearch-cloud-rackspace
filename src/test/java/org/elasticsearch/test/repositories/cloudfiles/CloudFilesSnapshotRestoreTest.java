@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.hasSize;
  * Time: 11:43 AM
  */
 @AbstractRackspaceTest.RackspaceTest
-@ElasticsearchIntegrationTest.ClusterScope(scope = ElasticsearchIntegrationTest.Scope.TEST, numNodes = 2)
+@ElasticsearchIntegrationTest.ClusterScope(scope = ElasticsearchIntegrationTest.Scope.TEST, numDataNodes = 2)
 public class CloudFilesSnapshotRestoreTest extends AbstractRackspaceTest{
     public static final String DEFAULT_CONTAINER = "es_snapshot_test";
 

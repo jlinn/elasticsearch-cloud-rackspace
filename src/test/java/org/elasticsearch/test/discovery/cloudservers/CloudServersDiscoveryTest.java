@@ -13,7 +13,7 @@ import static org.elasticsearch.common.settings.ImmutableSettings.settingsBuilde
  * Time: 2:26 PM
  */
 @AbstractRackspaceTest.RackspaceTest
-@ElasticsearchIntegrationTest.ClusterScope(scope = ElasticsearchIntegrationTest.Scope.TEST, numNodes = 0)
+@ElasticsearchIntegrationTest.ClusterScope(scope = ElasticsearchIntegrationTest.Scope.TEST, numDataNodes = 0, numClientNodes = 0)
 public class CloudServersDiscoveryTest extends AbstractRackspaceTest{
     @Test
     public void testStart(){
