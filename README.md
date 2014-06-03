@@ -13,6 +13,7 @@ bin/plugin --url https://github.com/jlinn/elasticsearch-cloud-rackspace/releases
 
 | Rackspace Cloud Plugin | Elasticsearch |
 |------------------------|---------------|
+| 0.3.1 | 1.2.1 |
 | 0.3.0 | 1.2.0 |
 | 0.2.1 | 1.1.1 |
 | 0.2.0 | 1.1.0 |
