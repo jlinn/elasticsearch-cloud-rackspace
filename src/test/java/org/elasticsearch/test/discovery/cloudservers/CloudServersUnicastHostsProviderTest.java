@@ -29,7 +29,7 @@ public class CloudServersUnicastHostsProviderTest {
     @Before
     public void setUp() throws IOException {
         settings = SettingsLoader.getSettingsFromResource("/elasticsearch.yml");
-        ThreadPool threadPool = new ThreadPool();
+        ThreadPool threadPool = new ThreadPool("testThreadPool");
         transportService = new TransportService(new LocalTransport(settings, threadPool, Version.fromId(1)), threadPool);
 
         String account = settings.get("rackspace.account");

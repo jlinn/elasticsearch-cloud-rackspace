@@ -8,11 +8,12 @@ repositories and uses the Rackspace Cloud Servers API to perform automatic unica
 
 To install the plugin, run the following command:
 ```
-bin/plugin --url https://github.com/jlinn/elasticsearch-cloud-rackspace/releases/download/v0.3.0/elasticsearch-cloud-rackspace-0.3.0.zip --install cloud-rackspace
+bin/plugin --url https://github.com/jlinn/elasticsearch-cloud-rackspace/releases/download/v0.4.0/elasticsearch-cloud-rackspace-0.4.0.zip --install cloud-rackspace
 ```
 
 | Rackspace Cloud Plugin | Elasticsearch |
 |------------------------|---------------|
+| 0.4.0 | 1.3.0 |
 | 0.3.1 | 1.2.1 |
 | 0.3.0 | 1.2.0 |
 | 0.2.1 | 1.1.1 |

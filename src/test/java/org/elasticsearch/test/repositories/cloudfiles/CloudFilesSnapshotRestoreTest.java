@@ -64,7 +64,6 @@ public class CloudFilesSnapshotRestoreTest extends AbstractRackspaceTest{
     @Test
     public void testSimpleWorkflow(){
         Client client = client();
-        logger.info("--> creating cloud files repository with container[{}]", cluster().getInstance(Settings.class).get("repositories.cloudfiles.container", DEFAULT_CONTAINER), basePath);
         PutRepositoryResponse putRepositoryResponse = client.admin().cluster().preparePutRepository("test-repo")
                 .setType("cloudfiles").setSettings(ImmutableSettings.settingsBuilder()
                     .put("base_path", basePath)
@@ -138,13 +137,13 @@ public class CloudFilesSnapshotRestoreTest extends AbstractRackspaceTest{
     }
 
     public void cleanRepositoryFiles(String basePath){
-        String container = cluster().getInstance(Settings.class).get("repositories.cloudfiles.container", DEFAULT_CONTAINER);
-        BlobStoreContext context = cluster().getInstance(CloudFilesService.class).context();
+        String container = internalCluster().getInstance(Settings.class).get("repositories.cloudfiles.container", DEFAULT_CONTAINER);
+        BlobStoreContext context = internalCluster().getInstance(CloudFilesService.class).context();
         context.getBlobStore().deleteDirectory(container, basePath);
     }
 
     public void deleteRepository(){
-        String container = cluster().getInstance(Settings.class).get("repositories.cloudfiles.container", DEFAULT_CONTAINER);
-        cluster().getInstance(CloudFilesService.class).context().getBlobStore().deleteContainer(container);
+        String container = internalCluster().getInstance(Settings.class).get("repositories.cloudfiles.container", DEFAULT_CONTAINER);
+        internalCluster().getInstance(CloudFilesService.class).context().getBlobStore().deleteContainer(container);
     }
 }

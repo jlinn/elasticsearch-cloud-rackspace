@@ -21,6 +21,6 @@ public class CloudServersDiscoveryTest extends AbstractRackspaceTest{
                 .put("discovery.type", "cloudServers")
                 .put("node.client", true)
                 .build();
-        cluster().startNode(nodeSettings);
+        internalCluster().startNode(nodeSettings);
     }
 }
