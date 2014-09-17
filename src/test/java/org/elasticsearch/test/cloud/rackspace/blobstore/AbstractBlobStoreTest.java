@@ -3,9 +3,9 @@ package org.elasticsearch.test.cloud.rackspace.blobstore;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.test.SettingsLoader;
 import org.jclouds.ContextBuilder;
-import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.domain.LocationBuilder;
 import org.jclouds.domain.LocationScope;
+import org.jclouds.openstack.swift.v1.blobstore.RegionScopedBlobStoreContext;
 import org.junit.After;
 import org.junit.Before;
 
@@ -21,7 +21,7 @@ import java.util.List;
 abstract public class AbstractBlobStoreTest {
     protected Settings settings;
 
-    protected BlobStoreContext blobStoreContext;
+    protected RegionScopedBlobStoreContext blobStoreContext;
 
     protected org.jclouds.domain.Location location;
 
@@ -33,9 +33,9 @@ abstract public class AbstractBlobStoreTest {
 
         String account = settings.get("rackspace.account");
         String key = settings.get("rackspace.key");
-        blobStoreContext = ContextBuilder.newBuilder("cloudfiles-us").credentials(account, key)
-                .buildView(BlobStoreContext.class);
-        location = new LocationBuilder().scope(LocationScope.REGION).id("ORD").description("Rackspace's ORD datacenter.").build();
+        blobStoreContext = ContextBuilder.newBuilder("rackspace-cloudfiles-us").credentials(account, key)
+                .buildView(RegionScopedBlobStoreContext.class);
+        location = new LocationBuilder().scope(LocationScope.REGION).id("ORD").description("ORD").build();
     }
 
     @After

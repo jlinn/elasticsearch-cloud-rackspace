@@ -19,8 +19,13 @@
             <useProjectArtifact>true</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <includes>
-                <include>org.apache.jclouds.provider:cloudfiles-us</include>
+                <include>org.apache.jclouds:jclouds-core</include>
+                <include>rg.apache.jclouds.api:openstack-keystone</include>
+                <include>rg.apache.jclouds.api:rackspace-cloudidentity</include>
                 <include>org.apache.jclouds.provider:rackspace-cloudservers-us</include>
+                <include>org.apache.jclouds:jclouds-blobstore</include>
+                <include>org.apache.jclouds.labs:rackspace-cloudfiles-us</include>
+                <include>org.apache.jclouds.labs:openstack-swift</include>
             </includes>
         </dependencySet>
     </dependencySets>

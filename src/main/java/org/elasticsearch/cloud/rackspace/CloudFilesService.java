@@ -6,10 +6,10 @@ import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.settings.SettingsFilter;
 import org.jclouds.ContextBuilder;
-import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.LocationBuilder;
 import org.jclouds.domain.LocationScope;
+import org.jclouds.openstack.swift.v1.blobstore.RegionScopedBlobStoreContext;
 
 /**
  * User: Joe Linn
@@ -17,7 +17,7 @@ import org.jclouds.domain.LocationScope;
  * Time: 10:09 AM
  */
 public class CloudFilesService extends AbstractLifecycleComponent<CloudFilesService>{
-    private BlobStoreContext context;
+    private RegionScopedBlobStoreContext context;
 
     private Location location;
 
@@ -32,14 +32,14 @@ public class CloudFilesService extends AbstractLifecycleComponent<CloudFilesServ
             return location;
         }
 
-        String dataCenter = componentSettings.get("region", "ORD");
+        final String dataCenter = componentSettings.get("region", "ORD");
 
         location = new LocationBuilder().scope(LocationScope.REGION).id(dataCenter).description("A Rackspace data center.").build();
 
         return location;
     }
 
-    public synchronized BlobStoreContext context(){
+    public synchronized RegionScopedBlobStoreContext context(){
         if(context != null){
             return context;
         }
@@ -47,7 +47,7 @@ public class CloudFilesService extends AbstractLifecycleComponent<CloudFilesServ
         String account = settings.get("rackspace.account");
         String key = settings.get("rackspace.key");
 
-        context = ContextBuilder.newBuilder("cloudfiles-us").credentials(account, key).buildView(BlobStoreContext.class);
+        context = ContextBuilder.newBuilder("rackspace-cloudfiles-us").credentials(account, key).buildView(RegionScopedBlobStoreContext.class);
 
         return context;
     }

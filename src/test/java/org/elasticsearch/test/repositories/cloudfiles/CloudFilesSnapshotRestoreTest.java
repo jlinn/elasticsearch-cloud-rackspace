@@ -2,6 +2,7 @@ package org.elasticsearch.test.repositories.cloudfiles;
 
 import org.elasticsearch.cloud.rackspace.CloudFilesService;
 import org.elasticsearch.common.collect.ImmutableList;
+import org.elasticsearch.plugins.PluginsService;
 import org.elasticsearch.snapshots.SnapshotInfo;
 import org.elasticsearch.test.cloud.rackspace.AbstractRackspaceTest;
 import org.elasticsearch.action.admin.cluster.repositories.put.PutRepositoryResponse;
@@ -43,6 +44,28 @@ public class CloudFilesSnapshotRestoreTest extends AbstractRackspaceTest{
                 .put("rackspace.enabled", true)
                 .put("repositories.cloudfiles.container", DEFAULT_CONTAINER)
                 .put("cloudfiles.container", DEFAULT_CONTAINER)
+                .build();
+    }
+
+    /**
+     * This method is used to obtain settings for the <tt>Nth</tt> node in the cluster.
+     * Nodes in this cluster are associated with an ordinal number such that nodes can
+     * be started with specific configurations. This method might be called multiple
+     * times with the same ordinal and is expected to return the same value for each invocation.
+     * In other words subclasses must ensure this method is idempotent.
+     *
+     * @param nodeOrdinal
+     */
+    @Override
+    protected Settings nodeSettings(int nodeOrdinal) {
+        return ImmutableSettings.builder()
+                .put(super.nodeSettings(nodeOrdinal))
+                .put(MockDirectoryHelper.RANDOM_PREVENT_DOUBLE_WRITE, false)
+                .put(MockDirectoryHelper.RANDOM_NO_DELETE_OPEN_FILE, false)
+                .put("rackspace.enabled", true)
+                .put("repositories.cloudfiles.container", DEFAULT_CONTAINER)
+                .put("cloudfiles.container", DEFAULT_CONTAINER)
+                .put("plugins." + PluginsService.LOAD_PLUGIN_FROM_CLASSPATH, true)
                 .build();
     }
 

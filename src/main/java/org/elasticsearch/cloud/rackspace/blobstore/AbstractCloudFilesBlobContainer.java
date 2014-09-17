@@ -6,6 +6,7 @@ import org.elasticsearch.common.blobstore.BlobPath;
 import org.elasticsearch.common.blobstore.support.AbstractBlobContainer;
 import org.elasticsearch.common.blobstore.support.PlainBlobMetaData;
 import org.elasticsearch.common.collect.ImmutableMap;
+import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.domain.Blob;
 import org.jclouds.blobstore.domain.PageSet;
 import org.jclouds.blobstore.domain.StorageMetadata;
@@ -36,7 +37,7 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
 
     @Override
     public boolean blobExists(String blobName) {
-        return blobStore.getBlobStoreContext().getBlobStore().blobExists(blobStore.getContainer(), buildKey(blobName));
+        return getRegionBlobStore().blobExists(blobStore.getContainer(), buildKey(blobName));
     }
 
     @Override
@@ -46,7 +47,7 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
             public void run() {
                 InputStream is;
                 try {
-                    Blob blob = blobStore.getBlobStoreContext().getBlobStore().getBlob(blobStore.getContainer(), buildKey(blobName));
+                    Blob blob = getRegionBlobStore().getBlob(blobStore.getContainer(), buildKey(blobName));
                     is = blob.getPayload().openStream();
                 } catch (IOException e) {
                     listener.onFailure(e);
@@ -73,7 +74,7 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
 
     @Override
     public boolean deleteBlob(String blobName) throws IOException {
-        blobStore.getBlobStoreContext().getBlobStore().removeBlob(blobStore.getContainer(), buildKey(blobName));
+        getRegionBlobStore().removeBlob(blobStore.getContainer(), buildKey(blobName));
         return true;
     }
 
@@ -102,7 +103,7 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
                 // continuation of a previously started list operation
                 options.afterMarker(marker);
             }
-            list = blobStore.getBlobStoreContext().getBlobStore().list(blobStore.getContainer(), options);
+            list = getRegionBlobStore().list(blobStore.getContainer(), options);
             for(StorageMetadata item : list){
                 String name = item.getName();
                 if(!keyPath.equals("/")){
@@ -128,5 +129,9 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
 
     protected String buildKey(String blobName){
         return keyPath + blobName;
+    }
+
+    protected BlobStore getRegionBlobStore(){
+        return blobStore.getBlobStoreContext().getBlobStore(blobStore.getLocation().getId());
     }
 }

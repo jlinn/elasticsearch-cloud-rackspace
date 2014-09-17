@@ -26,37 +26,38 @@ import java.util.concurrent.TimeUnit;
  * Time: 10:58 AM
  */
 public class CloudFilesRepository extends BlobStoreRepository{
-    public final static String TYPE = "cloudfiles";
+    public static final String TYPE = "cloudfiles";
 
     private final CloudFilesBlobStore blobStore;
 
     private final BlobPath basePath;
 
-    private ByteSizeValue chunkSize;
+    private final ByteSizeValue chunkSize;
 
-    private boolean compress;
+    private final boolean compress;
 
     @Inject
     protected CloudFilesRepository(String repositoryName, RepositorySettings repositorySettings, IndexShardRepository indexShardRepository, CloudFilesService cloudFilesService) {
         super(repositoryName, repositorySettings, indexShardRepository);
 
-        String container = repositorySettings.settings().get("container", componentSettings.get("container"));
-        if(container == null){
+        final String container = repositorySettings.settings().get("container", componentSettings.get("container"));
+        if(container == null || container.equals("")){
             throw new RepositoryException(repositoryName, "No container defined for cloud files gateway.");
         }
 
-        String dataCenter = repositorySettings.settings().get("region", componentSettings.get("region"));
-        if(dataCenter == null){
-            dataCenter = "ORD";
-        }
-        int concurrentStreams = repositorySettings.settings().getAsInt("concurrent_streams", componentSettings.getAsInt("concurrent_streams", 5));
+        final String dataCenter = repositorySettings.settings().get("region", componentSettings.get("region", "ORD"));
+        final int concurrentStreams = repositorySettings.settings().getAsInt("concurrent_streams", componentSettings.getAsInt("concurrent_streams", 5));
         ExecutorService concurrentStreamPool = EsExecutors.newScaling(1, concurrentStreams, 5, TimeUnit.SECONDS, EsExecutors.daemonThreadFactory(settings, "[cloudfiles_stream]"));
-        Location location = new LocationBuilder().scope(LocationScope.REGION).id(dataCenter).description("Rackspace's ORD datacenter.").build();
+        final Location location = new LocationBuilder()
+                .scope(LocationScope.REGION)
+                .id(dataCenter)
+                .description(String.format("Rackspace's %s datacenter.", dataCenter))
+                .build();
 
-        logger.debug("using container [{}], data center [{}], chunk_size [{}], concurrent_streams [{}]", container, dataCenter, chunkSize, concurrentStreams);
         blobStore = new CloudFilesBlobStore(settings, cloudFilesService.context(), container, location, concurrentStreamPool);
         this.chunkSize = repositorySettings.settings().getAsBytesSize("chunk_size", componentSettings.getAsBytesSize("chunk_size", new ByteSizeValue(100, ByteSizeUnit.MB)));
         this.compress = repositorySettings.settings().getAsBoolean("compress", componentSettings.getAsBoolean("compress", false));
+        logger.debug("using container [{}], data center [{}], chunk_size [{}], concurrent_streams [{}]", container, dataCenter, chunkSize, concurrentStreams);
         String basePath = repositorySettings.settings().get("base_path", null);
         if (Strings.hasLength(basePath)) {
             BlobPath path = new BlobPath();

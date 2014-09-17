@@ -2,6 +2,7 @@ package org.elasticsearch.cloud.rackspace.blobstore;
 
 import org.elasticsearch.common.blobstore.BlobPath;
 import org.elasticsearch.common.blobstore.ImmutableBlobContainer;
+import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.domain.Blob;
 
 import java.io.IOException;
@@ -26,9 +27,10 @@ public class CloudFilesImmutableBlobContainer extends AbstractCloudFilesBlobCont
             public void run() {
                 Map<String, String> metadata = new HashMap<String, String>();
                 metadata.put("length", String.valueOf(sizeInBytes));
-                Blob blob = blobStore.getBlobStoreContext().getBlobStore().blobBuilder(buildKey(blobName)).userMetadata(metadata)
+                BlobStore regionBlobStore = getRegionBlobStore();
+                Blob blob = regionBlobStore.blobBuilder(buildKey(blobName)).userMetadata(metadata)
                         .payload(is).contentLength(sizeInBytes).build();
-                blobStore.getBlobStoreContext().getBlobStore().putBlob(blobStore.getContainer(), blob);
+                regionBlobStore.putBlob(blobStore.getContainer(), blob);
                 listener.onCompleted();
             }
         });
@@ -36,7 +38,8 @@ public class CloudFilesImmutableBlobContainer extends AbstractCloudFilesBlobCont
 
     @Override
     public void writeBlob(String blobName, InputStream is, long sizeInBytes) throws IOException {
-        Blob blob = blobStore.getBlobStoreContext().getBlobStore().blobBuilder(buildKey(blobName)).payload(is).contentLength(sizeInBytes).build();
-        blobStore.getBlobStoreContext().getBlobStore().putBlob(blobStore.getContainer(), blob);
+        BlobStore regionBlobStore = getRegionBlobStore();
+        Blob blob = regionBlobStore.blobBuilder(buildKey(blobName)).payload(is).contentLength(sizeInBytes).build();
+        regionBlobStore.putBlob(blobStore.getContainer(), blob);
     }
 }
