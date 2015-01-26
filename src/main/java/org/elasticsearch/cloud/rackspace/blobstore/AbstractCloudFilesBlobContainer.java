@@ -11,6 +11,8 @@ import org.jclouds.blobstore.domain.Blob;
 import org.jclouds.blobstore.domain.PageSet;
 import org.jclouds.blobstore.domain.StorageMetadata;
 import org.jclouds.blobstore.options.ListContainerOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +23,8 @@ import java.io.InputStream;
  * Time: 12:09 PM
  */
 abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContainer{
+    private static final Logger logger = LoggerFactory.getLogger(AbstractCloudFilesBlobContainer.class);
+
     protected final CloudFilesBlobStore blobStore;
 
     protected final String keyPath;
@@ -37,6 +41,7 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
 
     @Override
     public boolean blobExists(String blobName) {
+        logger.debug("Checking existence of blob named " + blobName);
         return getRegionBlobStore().blobExists(blobStore.getContainer(), buildKey(blobName));
     }
 
@@ -45,6 +50,7 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
         blobStore.getExecutor().execute(new Runnable() {
             @Override
             public void run() {
+                logger.debug("Preparing to read blob named " + blobName);
                 InputStream is;
                 try {
                     Blob blob = getRegionBlobStore().getBlob(blobStore.getContainer(), buildKey(blobName));
@@ -60,11 +66,12 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
                         listener.onPartial(buffer, 0, bytesRead);
                     }
                     listener.onCompleted();
+                    logger.debug("Successfully read blob named " + blobName);
                 } catch (IOException e) {
                     try {
                         is.close();
-                    } catch (IOException ignored) {
-
+                    } catch (IOException er) {
+                        logger.error("Failed to close InputStream while reading blob named " + blobName, er);
                     }
                     listener.onFailure(e);
                 }
@@ -85,6 +92,7 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
 
     @Override
     public ImmutableMap<String, BlobMetaData> listBlobsByPrefix(@Nullable String blobNamePrefix) throws IOException {
+        logger.debug("Preparing to list blobs with prefix: " + blobNamePrefix);
         ImmutableMap.Builder<String, BlobMetaData> blobsBuilder = ImmutableMap.builder();
         PageSet<? extends StorageMetadata> list = null;
         String marker = null;
@@ -124,6 +132,9 @@ abstract public class AbstractCloudFilesBlobContainer extends AbstractBlobContai
             }
         }
 
+        if(logger.isDebugEnabled()){
+            logger.debug(String.format("Got %s blobs with prefix %s", list.size(), blobNamePrefix));
+        }
         return blobsBuilder.build();
     }
 

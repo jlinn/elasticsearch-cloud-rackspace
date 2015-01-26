@@ -5,7 +5,7 @@
     <name>elasticsearch-cloud-rackspace</name>
     <groupId>org.elasticsearch</groupId>
     <artifactId>elasticsearch-cloud-rackspace</artifactId>
-    <version>0.4.1</version>
+    <version>0.4.2</version>
     <packaging>jar</packaging>
     <description>Rackspace Cloud plugin for Elasticsearch</description>
     <inceptionYear>2014</inceptionYear>
@@ -63,6 +63,12 @@
             <artifactId>elasticsearch</artifactId>
             <version>${elasticsearch.version}</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
         </dependency>
 
         <dependency>
